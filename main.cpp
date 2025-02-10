@@ -3,6 +3,7 @@
 using namespace std;
 void numberAdd(int num, int numCount, int* &heap);
 void sortAdd(int num, int child, int* &heap);
+void deleteRoot(int &numCount, int* &heap);
 int main() {
   int* heap = new int[100];
   char input[9];
@@ -33,7 +34,19 @@ int main() {
     cout << "\n";
   }
    else if (strcmp(input, "DELETE") == 0) {
-
+     cout << "ROOT or ALL?" << endl;
+     char delInput[6];
+     cin >> delInput;
+     if (strcmp(delInput, "ROOT") == 0) {
+       deleteRoot(numCount, heap);
+     }
+     else if (strcmp(delInput, "ALL") == 0) {
+       cout << "there are " << numCount << endl;
+       int count = numCount;
+       for (int i = 0; i < count; i++) {
+	 deleteRoot(numCount, heap);
+       }
+     }
    }
    else if (strcmp(input, "QUIT") == 0) {
      quit = true;
@@ -81,3 +94,24 @@ void sortAdd(int num, int child, int* &heap) {
 }
 
 
+void deleteRoot(int &numCount, int* &heap) {
+  cout << "deleting: " << heap[1] << endl;
+  heap[1] = heap[numCount];
+  heap[numCount] = 0;
+  numCount--;
+  int index = 1;
+  int left = index * 2;
+  int right = (index * 2) + 1;
+  while (heap[index] < heap[left] || heap[index] < heap[right] && index < numCount) {
+    if (heap[left] > heap[right]) {
+      int temp = heap[index];
+      heap[index] = heap[left];
+      heap[left] = temp;
+    }
+    else {
+      int temp = heap[index];
+      heap[index] = heap[right];
+      heap[right] = temp;
+    }
+  }
+}
